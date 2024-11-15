@@ -1,17 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { Task } from "@/types/task";
+import { useState, useEffect } from "react";
+import { TaskType } from "@/types/task";
 import { TaskInput } from "./TaskInput";
 import { TaskFilter } from "./TaskFilter";
 import { TaskList } from "./TaskList";
+import { TaskFooter } from "./TaskFooter";
 
 export function TaskContainer() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [isClient, setIsClient] = useState(false);
   const [filter, setFilter] = useState<"all" | "completed" | "todo">("all");
 
+  // Vérifier si nous sommes côté client
+  useEffect(() => {
+    setIsClient(true);
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      const parsedTasks = JSON.parse(savedTasks);
+      // Convertir les dates string en objets Date
+      const tasksWithDates = parsedTasks.map(
+        (task: Omit<TaskType, "createdAt"> & { createdAt: string }) => ({
+          ...task,
+          createdAt: new Date(task.createdAt),
+        })
+      );
+      setTasks(tasksWithDates);
+    }
+  }, []);
+
+  // Sauvegarder dans localStorage
+  useEffect(() => {
+    if (isClient && tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  }, [tasks, isClient]);
+
   const addTask = (title: string) => {
-    const task: Task = {
+    const task: TaskType = {
       id: Date.now().toString(),
       title,
       completed: false,
@@ -47,6 +73,7 @@ export function TaskContainer() {
         onToggle={toggleTask}
         onDelete={deleteTask}
       />
+      <TaskFooter tasks={tasks} />
     </div>
   );
 }

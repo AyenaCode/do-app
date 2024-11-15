@@ -1,7 +1,7 @@
-import { Task } from "@/types/task";
+import { TaskType } from "@/types/task";
 
 interface TaskFooterProps {
-  tasks: Task[];
+  tasks: TaskType[];
 }
 
 export const TaskFooter: React.FC<TaskFooterProps> = ({ tasks }) => {

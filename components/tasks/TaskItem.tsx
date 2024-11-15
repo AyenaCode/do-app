@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Task } from "@/types/task";
+import { TaskType } from "@/types/task";
 
 interface TaskItemProps {
-  task: Task;
+  task: TaskType;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
 }

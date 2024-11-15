@@ -1,27 +1,27 @@
-import { Task } from "@/types/task";
+import { TaskType } from "@/types/task";
 import { TaskItem } from "./TaskItem";
-import { TaskFooter } from "./TaskFooter";
 
 interface TaskListProps {
-  tasks: Task[];
+  tasks: TaskType[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
-export function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
+export const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onToggle,
+  onDelete,
+}) => {
   return (
-    <>
-      <div className="space-y-2">
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onToggle={onToggle}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
-      <TaskFooter tasks={tasks} />
-    </>
+    <div className="flex flex-col gap-4">
+      {tasks.map((task) => (
+        <TaskItem
+          key={task.id}
+          task={task}
+          onToggle={onToggle}
+          onDelete={onDelete}
+        />
+      ))}
+    </div>
   );
-}
+};
